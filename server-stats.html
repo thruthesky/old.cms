@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+    <title>Server Statistics</title>
+    <style type="text/css">
+        .graph {
+            width: 120px;
+            height: 40px;
+            margin-top:100px;
+            border: 1px solid #aeaeae;
+            background-color: #eaeaea;
+
+        }
+        .bar {
+            margin: 0;
+            padding: 0;
+            bottom: 0;
+            display: inline-block;
+            position: relative;
+        }
+    </style>
+
+    <script src="js/jquery-2.2.4.min.js"></script>
+</head>
+<body>
+
+<div class='graph'>
+    <span></span>
+</div>
+
+<script>
+
+    function add_bar(data_int, raw){
+        var color = '#356F07';
+        if ( data_int > 130 ) color = 'red';
+        else if ( data_int > 100 ) color = '#883322';
+        else if ( data_int > 90 ) color = '#6F320B';
+        else if ( data_int > 80 ) color = '#6F5F13';
+        else if ( data_int < 80 ) color = '#356F07';
+        var height = Math.round(data_int) + 5;
+        var top = 40 - height;
+        $('.graph').append('<span style="height:'+height+'px;width:1px;background-color:'+color+';top:'+top+'px;" class="bar" title="'+raw+' load average">\200</span>');
+    }
+
+    function loop_server_load() {
+        $.get('http://218.50.181.110/monitor/index.php',function(load){
+            var data = JSON.parse(load);
+            for (i = 0; i < data.length; i++){
+                var raw_data=data[i].load_average;
+                var data_int = parseInt(parseFloat(data[i].load_average * 100));
+                add_bar(data_int, raw_data);
+                if (i > 116) {
+                    $span = $('.graph').find("span:first-child");
+                    $span.remove();
+                }
+            }
+        });
+        setTimeout(function(){
+            loop_server_load();
+        }, 60000)
+    }
+
+    loop_server_load();
+
+</script>
+
+
+
+</body>
+</html>

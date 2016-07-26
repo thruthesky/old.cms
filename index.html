@@ -31,6 +31,9 @@
         .last-ping-time {
             font-size: 9pt;
         }
+        .ping-drop-count {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -59,7 +62,8 @@
 
 
         var m = '<div id="monitor-'+id+'" class="internet-monitor">' +
-                '<h1>'+title+'</h1>' +
+                '<h1>'+title+'(<span title="ping drop count / no. of drops for siren" class="ping-drop-count">0</span>/'+count+')</h1>' +
+                'Mute <input type="checkbox" class="mute">' +
                 '    <div class="display">' +
                 '       <div class="graph">' +
                 '       </div>' +
@@ -71,8 +75,8 @@
         loop_ping_graph( id, ip, siren_count );
     }
 
-    add_ping_monitor('kiss', 'Kiss Internet Connectivity', '168.126.63.1');
-    add_ping_monitor('convergy', 'Convergy Internet Connectivity', '111.125.97.38', 5);
+    add_ping_monitor('kiss', 'Kiss Internet', '168.126.63.1');
+    add_ping_monitor('convergy', 'Convergy Internet', '111.125.97.38', 15);
     add_ping_monitor('philgo6', 'w6.philgo.com site', 'w6.philgo.com', 2);
     add_ping_monitor('philgo7', 'w7.philgo.com site', 'w7.philgo.com', 2);
     add_ping_monitor('philgo8', 'w8.philgo.com site', 'w8.philgo.com', 2);
@@ -80,13 +84,18 @@
     function loop_ping_graph( id, ip ) {
         var exec = require('child_process').exec, child;
         child = exec('ping -n 1 ' + ip, function(error, stdout, stderr){
+
+            var $monitor = get_monitor(id);
             if(error !== null) {
                 add_bar(id, ip,  999);
                 ///$('body').append("<div>ERROR: "+error.message+"</div>");
 
                 siren_count_for_play[id] ++;
                 if ( siren_count_for_play[id] >= siren_count[id] ) {
-                    play_mp3(id, "siren");
+                    if ( $monitor.find('.mute').prop('checked') ) {
+
+                    }
+                    else play_mp3(id, "siren");
                 }
             }
             else {
@@ -96,10 +105,15 @@
                 var ms = re[1];
                 add_bar(id, ip, ms);
             }
+            $monitor.find('.ping-drop-count').text( siren_count_for_play[id] );
         });
         setTimeout(function() {
             loop_ping_graph( id, ip );
         }, 999);
+    }
+
+    function get_monitor( id ) {
+        return $('#monitor-'+id);
     }
 
     function add_bar( id, ip, ms ) {
@@ -123,7 +137,7 @@
 
         //console.log(top);
 
-        var $monitor = $('#monitor-'+id);
+        var $monitor = get_monitor(id);
         var $g = $monitor.find('.graph');
         var $d = $monitor.find(".display");
         $g.append("<span style='top:"+top+"px; width:1px; background-color:"+color+";' title='"+ms+"ms'></span>");
