@@ -1,0 +1,31 @@
+
+
+
+.graph_load_average,
+.graph_cpu,
+.graph_memory {
+    margin-bottom:5px;
+    padding:0;
+    width: 200px;
+    height: 50px;
+    border: 1px solid #aeaeae;
+    background-color: #eaeaea;
+}
+
+
+h4{
+    margin: 0;
+    padding: 0;
+    font-family: arial;
+}
+h5{
+    margin: 0;
+    padding: 0;
+    font-family: arial;
+}
+
+.title{
+    font-size: 15px;
+    font-family: arial;
+    display: inline-block;
+}
