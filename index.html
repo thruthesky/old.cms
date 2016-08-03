@@ -1,174 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Hello World!</title>
+    <meta charset="UTF-8">
+    <title>Center Monitoring System</title>
+    <link rel = " stylesheet " href=" css/server_stats.css ">
+    <link rel=" stylesheet " href=" css/ping.css ">
+    <link rel=" stylesheet " href=" css/styles.css ">
     <script src="js/jquery-2.2.4.min.js"></script>
-    <script src="js/js.cookie.js"></script>
-    <script src="js/underscore-1.8.3.min.js"></script>
-    <script src="js/underscore.string.min.js"></script>
-    <style>
-        .internet-monitor {
-            float:left;
-            width: 200px;
-        }
-        .internet-monitor h1 {
-            font-size: 10pt;
-        }
-        .display {
-            position: relative;
-            height: 50px;
-            overflow: hidden;
-        }
-        .graph {
-            display:inline;
-        }
-        .graph span {
-            display: inline-block;
-            position: relative;
-            top: 0;
-            height: 50px;
-        }
-        .last-ping-time {
-            font-size: 9pt;
-        }
-    </style>
+
 </head>
 <body>
 
-<div>
+<!--
+<script src="js/server_disk.js"></script>
 
-</div>
-
+-->
+<script src=" js/ping.js "></script>
+ <script src="js/server_top.js"></script>
+<script src="js/server_disk.js"></script>
 <script>
 
-    var siren_count = {};
-    var siren_count_for_play = {};
-
-    /**
-     *
-     * @param id
-     * @param title
-     * @param ip
-     * @param count - is the count number for playing siren. If this value given, it will play only when the ping drops happens in straight more than this number.
-     *      숫자가 주어지면, 해당 숫자 만큼 ping 이 연속으로 drop 되어야 싸이렌이 울린다.
-     */
-    function add_ping_monitor(id, title, ip, count) {
-        if ( typeof count == 'undefined' ) count = 0;
-        siren_count[id] = count;
-        siren_count_for_play[id] = 0;
+    add_top_monitor( { id: 'dev_top', title: 'dev.withcenter.com', source: 'http://218.50.181.110/monitor/index.php' } );
+    add_disk_monitor( {id: 'dev_disk', title:'dev.withcenter.com(DISK)', source:'http://218.50.181.110/monitor/df.php'} );
 
 
-        var m = '<div id="monitor-'+id+'" class="internet-monitor">' +
-                '<h1>'+title+'</h1>' +
-                '    <div class="display">' +
-                '       <div class="graph">' +
-                '       </div>' +
-                '   </div>' +
-                '       <div class="last-ping-time"></div>' +
-                '</div>' +
-                '';
-        $('body').append( m );
-        loop_ping_graph( id, ip, siren_count );
-    }
-
-    add_ping_monitor('kiss', 'Kiss Internet Connectivity', '168.126.63.1');
-    add_ping_monitor('convergy', 'Convergy Internet Connectivity', '111.125.97.38', 5);
-    add_ping_monitor('philgo6', 'w6.philgo.com site', 'w6.philgo.com', 2);
-    add_ping_monitor('philgo7', 'w7.philgo.com site', 'w7.philgo.com', 2);
-    add_ping_monitor('philgo8', 'w8.philgo.com site', 'w8.philgo.com', 2);
-
-    function loop_ping_graph( id, ip ) {
-        var exec = require('child_process').exec, child;
-        child = exec('ping -n 1 ' + ip, function(error, stdout, stderr){
-            if(error !== null) {
-                add_bar(id, ip,  999);
-                ///$('body').append("<div>ERROR: "+error.message+"</div>");
-
-                siren_count_for_play[id] ++;
-                if ( siren_count_for_play[id] >= siren_count[id] ) {
-                    play_mp3(id, "siren");
-                }
-            }
-            else {
-                siren_count_for_play[id] = 0;
-                var patttern = /time=([0-9]+)ms/;
-                var re = patttern.exec( stdout );
-                var ms = re[1];
-                add_bar(id, ip, ms);
-            }
-        });
-        setTimeout(function() {
-            loop_ping_graph( id, ip );
-        }, 999);
-    }
-
-    function add_bar( id, ip, ms ) {
-
-
-        var color = '#356F07';
-        if ( ms > 500 ) color = 'red';
-        else if ( ms > 200 ) color = '#883322';
-        else if ( ms > 150 ) color = '#6F320B';
-        else if ( ms > 100 ) color = '#6F5F13';
-        else if ( ms > 80 ) color = '#356F07';
-
-        var height = Math.floor( ms / 5 );
-
-        var p = Math.floor( 50 * height / 100 );
-        //console.log(p);
-
-        var top = 50 - p;
-        if ( top < 0 ) top = 0;
-        //console.log(top);
-
-        //console.log(top);
-
-        var $monitor = $('#monitor-'+id);
-        var $g = $monitor.find('.graph');
-        var $d = $monitor.find(".display");
-        $g.append("<span style='top:"+top+"px; width:1px; background-color:"+color+";' title='"+ms+"ms'></span>");
-        var width_display = $d.width();
-        var s = $g.width() - width_display;
-
-        //console.log("display width: " + $d.width() );
-        //console.log("g width: " + $g.width() );
-
-        //console.log('s:' + s);
-
-        if ( s >= -20 ) {
-            $g.find('span').eq(0).remove();
-        }
-        //var n = Date.now();
-        //var Y = Date.Year
-        var d = new Date();
-        var s = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-
-        $monitor.find('.last-ping-time').text( 'Last ping time: ' + s );
-    }
-
-
-    function isNodeWebkit() {
-        return !!(typeof process !== "undefined" && process.versions['node-webkit']);
-    }
-
-    function play_mp3(id, fileName) {
-
-
-        var m;
-        if ( isNodeWebkit() ) {
-            m = '<audio src="mp3/'+fileName+'.ogg" autoplay>Your browser does not support the <code>audio</code> element.</audio>';
-        }
-        else {
-            m = '<audio src="mp3/'+fileName+'.mp3" autoplay>Your browser does not support the <code>audio</code> element.</audio>';
-        }
-
-        $('body').append(m);
-
-
-    }
+    add_ping_monitor( {id: 'kiss',title: 'KISS Internet',ip: '168.126.63.1'} );
+    add_ping_monitor( { id: 'convergy', title: 'Convergy Internet', ip: '111.125.97.38', sound: 'birds_phalcon', count: 3 } );
+    add_ping_monitor( { id: 'philgo6', title: 'w6.philgo.com site', ip: 'w6.philgo.com', count: 2 } );
+    add_ping_monitor( { id: 'philgo7', title: 'w7.philgo.com site', ip: 'w7.philgo.com', count: 2 } );
+    add_ping_monitor( { id: 'philgo8', title: 'w8.philgo.com site', ip: 'w8.philgo.com', count: 2 } );
 
 </script>
-
 
 </body>
 </html>

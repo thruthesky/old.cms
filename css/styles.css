@@ -1,0 +1,56 @@
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 1px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+body{
+    background-color: #DFE2DB;
+}
+div{
+    background-color: white;
+}
+.container_server_stats{
+    border: 1px solid black;
+    position: relative;
+    padding: 2px;
+    width: 206px;
+    margin: 3px;
+}
+.container_disk_stats{
+    border: 1px solid black;
+    position: relative;
+    padding: 5px;
+    width: 206px;
+    margin: 1px;
+}
+.graph_disk{
+    margin:0;
+    padding: 0;
+    width: 200px;
+    height: 50px;
+    border: 1px solid #aeaeae;
+    background-color: #eaeaea;
+
+
+}
+
+body > div {
+    float:left;
+}
+
+.graph_container{
+
+
+}
