@@ -1,0 +1,32 @@
+.internet-monitor {
+    float:left;
+    margin: 1px;
+    padding: 7px;
+    width: 200px;
+    border: 1px solid black;
+}
+.internet-monitor h1 {
+    font-size: 10pt;
+    font-family: arial;
+}
+.display {
+    position: relative;
+    height: 50px;
+    overflow: hidden;
+}
+.graph {
+    display:inline;
+
+}
+.graph span {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    height: 50px;
+}
+.last-ping-time {
+    font-size: 9pt;
+}
+.ping-drop-count {
+    font-weight: bold;
+}
