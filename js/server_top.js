@@ -6,7 +6,6 @@ function add_top_monitor( o ) {
         id: 'no-id',
         title: 'No title',
         source: 'no-source',
-        count: 0,
         sound: 'siren'
     };
 
@@ -14,47 +13,47 @@ function add_top_monitor( o ) {
     o = $.extend( defaults, o );
 
     var containers = '<div class=" container_server_stats ' +o.id+ '">' +
-        '<div class=" server_name ' +o.id+ '" ></div>' +
+        '<div class=" server_name name_' +o.id+ '" ></div>' +
         '<hr style=" margin:0; padding:0;">' +
-        '<div class=" system_time ' +o.id+ '"></div>' +
-        '<div class=" up_day ' +o.id+ '"></div>' +
-        '<div class=" no_task ' +o.id+ '"></div>' +
-        '<div class=" swap_total ' +o.id+ '"></div>' +
-        '<div class=" swap_free ' +o.id+ '"></div>' +
+        '<div class=" system_time time_' +o.id+ '"></div>' +
+    //    '<div class=" up_day ' +o.id+ '"></div>' +
+        '<div class=" swap_total swaptotal_'+o.id+ '"></div>' +
+        '<div class=" swap_free swapfree_' +o.id+ '"></div>' +
+        '<div class=" no_task task_' +o.id+ '"></div>' +
+        '<div class=" graph_container graph_' +o.id+ '">' +
 
-            //graph
-        '<div class=" graph_container ' +o.id+ '">' +
-
-        '<hr style=" margin:0; padding:0;">' +
-        '<div class=" label-load ' +o.id+ '"><h5>Load Average:</h5></div>' +
-        'Mute<input type="checkbox" class="mute">' +
-        '<select class="sound" style="width: 60px;">' +
+            
+        '<div class="label label-load ' +o.id+ '"><span><h5>Load Average:</h5></span>' +
+        '<span><select class="sound" style="width: 60px;">' +
         '   <option value="siren">siren</option>' +
         '   <option value="birds_phalcon">birds_phalcon</option>' +
         '</select>' +
-        '<input type="text" title="Update count no. for ping drop siren." name="ping-drop-siren-no" size="2" value="'+o.count+'">' +
+        '<input type="text" title="Update count no. for ping drop siren." name="ping-drop-siren-no" size="2" value="'+o.count+'"></span>' +
+        '</div>'+
         '<div class=" graph_load_average load_'+o.id+ '"> </div>' +
 
-        '<hr style=" margin:0; padding:0;">' +
-        '<div class=" label-cpu ' +o.id+ '"><h5>CPU Health:</h5></div>' +
-        'Mute<input type="checkbox" class="mute">' +
-        '<select class="sound" style="width: 60px;">' +
+            
+        '<div class="label label-cpu ' +o.id+ '"><span><h5>CPU Health:&nbsp&nbsp</span></h5></span>' +
+        '<span><select class="sound" style="width: 60px;">' +
         '   <option value="siren">siren</option>' +
         '   <option value="birds_phalcon">birds_phalcon</option>' +
         '</select>' +
-        '<input type="text" title="Update count no. for ping drop siren." name="ping-drop-siren-no" size="2" value="'+o.count+'">' +
+        '<input type="text" title="Update count no. for ping drop siren." name="ping-drop-siren-no" size="2" value="'+o.count+'"></span>' +
+        '</div>'+
         '<div class=" graph_cpu cpu_' +o.id+ '"></div>' +
-
-        '<hr style=" margin:0; padding:0;">' +
-        '<div class=" label-memory ' +o.id+ '"><h5>Memory Health:</h5></div>' +
-        'Mute<input type="checkbox" class="mute">' +
-        '<select class="sound" style="width: 60px;">' +
+            
+            
+        '<div class="label label-memory ' +o.id+ '"><span><h5>Memory Health:</h5></span>' +
+        '<span><select class="sound" style="width: 60px;">' +
         '   <option value="siren">siren</option>' +
         '   <option value="birds_phalcon">birds_phalcon</option>' +
         '</select>' +
-        '<input type="text" title="Update count no. for ping drop siren." name="ping-drop-siren-no" size="2" value="'+o.count+'">' +
+        '<input type="text" title="Update count no. for ping drop siren." name="ping-drop-siren-no" size="2" value="'+o.count+'"></span>' +
+        '</div>'+
+
         '<div class=" graph_memory memory_' +o.id+ '"></div>' +
         '</div>' +
+        
         '</div>' +
         '';
 
@@ -79,27 +78,31 @@ function get_basic_information( o, data ){
 
     var latest = data.length - 1;
     var time = data[ latest ].system_time;
-    var up_days = data[ latest ].up_days;
+  //  var up_days = data[ latest ].up_days;
     //var user = data[ latest ].no_of_user;
     var task = data[ latest ].tasks;
     var swap_free = data[ latest ].swap_free;
     var swap_total = data[ latest ].swap_total;
     //var zombie = data[ latest ].zombie;
 
+    var new_swap_free = convert_to_mb( swap_free, 'kb' );
+    var new_swap_total = convert_to_mb( swap_total, 'kb' );
+
+
     var label_style ="<h4>"+ o.title +"</h4>";
-    var time_style = "<div class='title'>System Time:</div><h5>"+ time +"</h5>";
-    var up_style = "<div class='title'>Up Days:</div><h5> "+ up_days +" days</h5>";
-    var task_style = "<div class='title'>Tasks:</div><h5>"+ task +"</h5>";
-    var swap_total_style ="<div class='title'>Swap total:</div><h5>"+ swap_total +" kb</h5>";
-    var swap_free_style ="<div class='title'>Swap free:</div><h5>"+ swap_free +" kb</h5>";
+    var time_style = "<div class='title'><span>System Time:&nbsp&nbsp</span><span><h5>"+ time +"</h5></span></div>";
+  //  var up_style = "<div class='title'>Up Days:</div><h5> "+ up_days +" days</h5>";
+    var task_style = "<div class='title'><span>Tasks:&nbsp&nbsp</span><span><h5>"+ task +"</h5></span></div>";
+    var swap_total_style ="<div class='title'><span>Swap total:&nbsp&nbsp</span><span><h5>"+ new_swap_total +"MB</h5></span></div>";
+    var swap_free_style ="<div class='title'><span>Swap free:&nbsp&nbsp</span><span><h5>"+ new_swap_free +"MB</h5></span></div>";
 
 
-    $(".no_task").html(task_style);
-    $(".server_name").html(label_style);
-    $(".system_time").html(time_style);
-    $(".up_day").html(up_style);
-    $(".swap_total").html(swap_total_style);
-    $(".swap_free").html(swap_free_style);
+    $(".task_"+o.id ).html(task_style);
+    $(".name_"+o.id ).html(label_style);
+    $(".time_"+o.id ).html(time_style);
+  //  $(".up_day").html(up_style);
+    $(".swaptotal_"+o.id ).html(swap_total_style);
+    $(".swapfree_"+o.id ).html(swap_free_style);
 
 }
 
@@ -231,8 +234,8 @@ function bar_graph_top(data, raw, num, location, unit, o){
         else if ( data_int > 51 ) color = '#356F07';
     }
 
-    var height = Math.round( data  / 2);
-    var top = Math.round(50 - ( height));
+    var height = Math.round( data  / 4);
+    var top = Math.round(25 - ( height));
 
 
     var style =    'margin: 0;'+

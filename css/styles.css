@@ -8,7 +8,7 @@ table {
 td, th {
     border: 1px solid #dddddd;
     text-align: left;
-    padding: 1px;
+    padding: 1;
 }
 
 tr:nth-child(even) {
@@ -20,37 +20,33 @@ body{
 }
 div{
     background-color: white;
+
 }
 .container_server_stats{
     border: 1px solid black;
     position: relative;
-    padding: 2px;
-    width: 206px;
-    margin: 3px;
+    padding: 5px;
+    width: 208px;
+    margin: 2px;
 }
 .container_disk_stats{
     border: 1px solid black;
     position: relative;
     padding: 5px;
-    width: 206px;
-    margin: 1px;
+    width: 208px;
+    margin: 2px;
 }
-.graph_disk{
-    margin:0;
-    padding: 0;
-    width: 200px;
-    height: 50px;
-    border: 1px solid #aeaeae;
-    background-color: #eaeaea;
 
-
-}
 
 body > div {
     float:left;
+    box-shadow: 2px 2px 2px #888888;
 }
 
-.graph_container{
+.label > span{
+    display: inline-block;
+}
 
-
+.title > span{
+    display: inline-block;
 }
