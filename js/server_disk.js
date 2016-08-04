@@ -5,7 +5,6 @@ function add_disk_monitor( o ) {
         id: 'no-id',
         title: 'No title',
         source: 'no-source',
-        count: 0,
         sound: 'siren'
     };
 
@@ -15,8 +14,8 @@ function add_disk_monitor( o ) {
     var containers = '<div class=" container_disk_stats ' +o.id+ '">'+
         '<div class=" disk_name ' +o.id+ '" ><h4>'+o.title+'</h4></div>'+
         '<hr style=" margin:4px; padding:0;">'+
-        'Mute<input type="checkbox" class="mute">' +
-        '<select class="sound" style="width: 60px;">' +
+        'Mute<input type="checkbox" class="mute_'+o.id+'">' +
+        '<select class="sound" name="monitor_'+o.id+'" style="width: 60px;">' +
         '   <option value="siren">siren</option>' +
         '   <option value="birds_phalcon">birds_phalcon</option>' +
         '</select>' +
@@ -53,9 +52,9 @@ function convert_to_mb( data_int, unit ){
         return current_value;
         //    console.log( current_value );
     }
-    else if( unit == '' ){
+    else if( unit == 'kb' || '' ){
         //   console.log( 'kilo' );
-        current_value = parseInt(data_int) * 1000000;
+        current_value = parseInt(data_int) * 0.001;
         return current_value;
         // console.log( current_value );
     }
@@ -107,7 +106,6 @@ function get_total_size( data, length, data_name ){
                 data_int = data_int_old.join("");
                 unit = unit_old.join("");
                 current_value = previous_value + convert_to_mb( data_int, unit );
-                console.log( convert_to_mb( data_int, unit ) );
                 break;
 
             default:
@@ -121,8 +119,10 @@ function get_total_size( data, length, data_name ){
 function get_disk( o, data ) {
 
     var location = ".disk_" + o.id;
+    var mute_element = ".mute_"+o.id;
     var $graph = $(location);
     var length = data.length;
+    var $mute = $( mute_element );
 
     var total_space = get_total_size( data, length, 'size' );
     var available_space = get_total_size( data, length, 'available' );
@@ -130,13 +130,17 @@ function get_disk( o, data ) {
     var raw_data;
     var data_int;
 
-    if ($graph.children().length < 200) {
 
+    if ($graph.children().length < 200) {
+        //var eldest_data = length >= 200 ? length - 200 : 0;
+
+        //for (var i = eldest_data; i < length; i++) {
         space_percentage = ( available_space / total_space ) * 100;
         raw_data = available_space;
         data_int = parseInt( space_percentage );
 
         bar_graph_disk( data_int, raw_data, 'disk', location );
+        //}
 
     }
     else{
@@ -148,6 +152,25 @@ function get_disk( o, data ) {
         var $span = $graph.find( "span:first-child" );
         $span.remove();
     }
+
+
+
+//    $mute.click( function(){
+     if( space_percentage >= 90 ){
+        if ( $mute.prop('checked') ) {
+            console.log( "muted"+mute_element);
+
+
+        }
+        else {
+
+            console.log( "play"+mute_element );
+            play_mp3( o );
+        }
+     }
+            // });
+
+
 }
 
 
@@ -160,7 +183,6 @@ function bar_graph_disk( data, raw, num, location ){
     var $graph = $( location );
     var color = '#356F07';
     var data_int = data;
-    var new_raw = raw.toLocaleString();
 
     if ( data_int < 10 ){ color = 'red';}
     else if ( data_int < 20 ){ color = '#883322';}
@@ -185,9 +207,14 @@ function bar_graph_disk( data, raw, num, location ){
         '';
 //console.log(graph);
 
-    var bar = '<span  " style="' +style+ '" title="' +new_raw+ 'MB '+data_int+'% free" id = "'+num+'">\200</span>';
+    var bar = '<span  " style="' +style+ '" title="' +raw+ 'MB, '+data_int+'% free" id = "'+num+'">\200</span>';
     $graph.append( bar );
 }
+
+
+
+
+
 
 
 function get_server_disk( o ) {

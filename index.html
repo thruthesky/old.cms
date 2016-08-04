@@ -19,9 +19,14 @@
  <script src="js/server_top.js"></script>
 <script src="js/server_disk.js"></script>
 <script>
-
-    add_top_monitor( { id: 'dev_top', title: 'dev.withcenter.com', source: 'http://218.50.181.110/monitor/index.php' } );
+    add_top_monitor( { id: 'dev_top_02', title: 'dev.withcenter.com_02', source: 'http://218.50.181.110/monitor/index.php' } );
+    add_top_monitor( { id: 'dev_top', title: 'dev.withcenter.com01', source: 'http://218.50.181.110/monitor/index.php' } );
     add_disk_monitor( {id: 'dev_disk', title:'dev.withcenter.com(DISK)', source:'http://218.50.181.110/monitor/df.php'} );
+
+
+    add_disk_monitor( {id: 'dev_disk_02', title:'dev.withcenter.com(DISK)_02', source:'http://218.50.181.110/monitor/df.php'} );
+
+
 
 
     add_ping_monitor( {id: 'kiss',title: 'KISS Internet',ip: '168.126.63.1'} );
