@@ -16,10 +16,8 @@ function add_top_monitor( o ) {
         '<div class=" server_name name_' +o.id+ '" ></div>' +
         '<hr style=" margin:0; padding:0;">' +
         '<div class=" system_time time_' +o.id+ '"></div>' +
-    //    '<div class=" up_day ' +o.id+ '"></div>' +
-        '<div class=" swap_total swaptotal_'+o.id+ '"></div>' +
-        '<div class=" swap_free swapfree_' +o.id+ '"></div>' +
-        '<div class=" no_task task_' +o.id+ '"></div>' +
+        //    '<div class=" up_day ' +o.id+ '"></div>' +
+        '<div class=" swap_total swap_used_'+o.id+ '"></div>' +
         '<div class=" graph_container graph_' +o.id+ '">' +
 
             
@@ -250,9 +248,11 @@ function bar_graph_top(data, raw, num, location, unit, o){
         '';
 //console.log(graph);
 
-    var bar = '<span  " style="' +style+ '" title="' +raw+unit+ '" id = "'+num+'">\200</span>';
+    var bar = '<span  style="' +style+ '" title="' +raw+unit+ '" id = "'+num+'">\200</span>';
     $graph.append( bar );
 }
+
+
 
 function get_server_stat( o ) {
 
@@ -270,3 +270,7 @@ function get_server_stat( o ) {
     }, 60999 );
 
 }
+
+$('body').on('click', '.container_server_stats', function () {
+   console.log("high");
+});

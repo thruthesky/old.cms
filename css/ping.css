@@ -1,7 +1,8 @@
 .internet-monitor {
-    float:left;
+    float: left;
     margin: 1px;
     padding: 7px;
+    padding-bottom: 9px;
     width: 200px;
     border: 1px solid black;
 }
