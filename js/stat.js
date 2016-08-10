@@ -131,11 +131,12 @@ function get_load_average( o, json ){
         var eldest_data = length >= 88 ? length - 88 : 0;
         for ( var i = eldest_data; i < length; i++ ){
 
-            raw = json[ i ].load_average;
-            data = ( raw / 2 ) * 100 ;
-           // console.log( raw );
+          raw = json[ i ].load_average;
+          //raw = 0.92;
+            data =Math.round( ( raw / 2 ) * 100 );
+        //   console.log( data );
             add_graph( o, location, data, raw, unit, i );
-           // console.log( data );
+
             param = 100 - data;
            // console.log( param );
             warning( param, 'load', o );
@@ -144,9 +145,10 @@ function get_load_average( o, json ){
 
         raw = json[ length -1 ].load_average;
        // raw = 1.75;
-        data = parseInt( parseFloat( raw * 100 ) );
+        data =Math.round( ( raw / 2 ) * 100 );
         add_graph(  o, location, data, raw, unit, length-1 );
         param = 100 - data;
+       //console.log( data );
         warning( param, 'load', o );
 
         var $span = $graph.find( "span:first-child" );
