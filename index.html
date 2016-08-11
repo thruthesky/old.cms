@@ -11,30 +11,26 @@
 </head>
 <body>
 
-<!--
+<script src=" js/output.js "></script>
 <script src="js/server_disk.js"></script>
 
--->
 <script src=" js/ping.js "></script>
- <script src="js/server_top.js"></script>
-<script src="js/server_disk.js"></script>
+<script src="js/stat.js"></script>
 <script>
-    add_top_monitor( { id: 'dev_top_02', title: 'dev.withcenter.com_02', source: 'http://218.50.181.110/monitor/index.php' } );
-    add_top_monitor( { id: 'dev_top', title: 'dev.withcenter.com01', source: 'http://218.50.181.110/monitor/index.php' } );
-    add_disk_monitor( {id: 'dev_disk', title:'dev.withcenter.com(DISK)', source:'http://218.50.181.110/monitor/df.php'} );
-
-
-    add_disk_monitor( {id: 'dev_disk_02', title:'dev.withcenter.com(DISK)_02', source:'http://218.50.181.110/monitor/df.php'} );
-
-
-
+    add_server_monitor( {
+        id:'dev',
+        title:'dev.withcenter.com',
+        source_top:'http://218.50.181.110/monitor/index.php',
+        source_disk:'http://218.50.181.110/monitor/df.php',
+        sound:'birds_phalcon',
+        time_zone:'KST'
+    } );
 
     add_ping_monitor( {id: 'kiss',title: 'KISS Internet',ip: '168.126.63.1'} );
     add_ping_monitor( { id: 'convergy', title: 'Convergy Internet', ip: '111.125.97.38', sound: 'birds_phalcon', count: 3 } );
     add_ping_monitor( { id: 'philgo6', title: 'w6.philgo.com site', ip: 'w6.philgo.com', count: 2 } );
     add_ping_monitor( { id: 'philgo7', title: 'w7.philgo.com site', ip: 'w7.philgo.com', count: 2 } );
     add_ping_monitor( { id: 'philgo8', title: 'w8.philgo.com site', ip: 'w8.philgo.com', count: 2 } );
-
 </script>
 
 </body>

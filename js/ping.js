@@ -80,7 +80,7 @@ function loop_ping_graph( o) {
 
             siren_count_for_play[o.id] ++;
 
-            console.log("if ( "+siren_count_for_play[o.id]+" >= " + siren_count[o.id] + " )");
+           // console.log("if ( "+siren_count_for_play[o.id]+" >= " + siren_count[o.id] + " )");
             if ( siren_count_for_play[o.id] >= siren_count[o.id] ) {
                 if ( $monitor.find('.mute').prop('checked') ) {
 
