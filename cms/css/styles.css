@@ -1,0 +1,14 @@
+
+body{
+    background-color: #DFE2DB;
+}
+div{
+    background-color: white;
+
+}
+body > div {
+    float:left;
+    overflow: hidden;
+    box-shadow: 2px 2px 2px #888888;
+
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Center Monitoring System</title>
+    <link rel = " stylesheet " href=" css/server_stats.css ">
+    <link rel=" stylesheet " href=" css/ping.css ">
+    <link rel=" stylesheet " href=" css/styles.css ">
+    <script src="js/jquery-2.2.4.min.js"></script>
+
+</head>
+<body>
+
+<script src=" js/output.js "></script>
+<script src="js/server_disk.js"></script>
+
+<script src=" js/ping.js "></script>
+<script src="js/stat.js"></script>
+<script>
+    add_server_monitor( {
+        id:'dev',
+        title:'dev.withcenter.com',
+        source_top:'http://218.50.181.110/monitor/index.php',
+        source_disk:'http://218.50.181.110/monitor/df.php',
+        sound:'siren',
+        time_zone:'KST'
+    } );
+
+    add_ping_monitor( {id: 'kiss',title: 'KISS Internet',ip: '168.126.63.1'} );
+    add_ping_monitor( { id: 'convergy', title: 'Convergy Internet', ip: '111.125.97.38', sound: 'birds_phalcon', count: 3 } );
+    add_ping_monitor( { id: 'philgo6', title: 'w6.philgo.com site', ip: 'w6.philgo.com', count: 2 } );
+    add_ping_monitor( { id: 'philgo7', title: 'w7.philgo.com site', ip: 'w7.philgo.com', count: 2 } );
+    add_ping_monitor( { id: 'philgo8', title: 'w8.philgo.com site', ip: 'w8.philgo.com', count: 2 } );
+</script>
+
+</body>
+</html>
